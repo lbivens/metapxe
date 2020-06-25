@@ -1,0 +1,62 @@
+[common]
+; These parameters instantiate on each section
+; These are also not specific to any boot item 
+; 
+; How long to wait before default option boots?
+timeout= 3000
+; What are the template files used for the menu 
+; and its entries?
+menuTemplate= templates/ipxe_menu.tpl
+bootTemplate= templates/boot_entry.tpl
+; Placeholder for aditional key-value storage methods
+machineDB= embedded
+; Server root
+; Note the double $ and the use of the next-server variable
+; in this example the dhcp option 'next-server' is assumed to be
+; the root for all boot files
+serverRoot= http://$${next-server}
+; Naming things is hard, this is a good option
+menuTitle= Welcome to MetaPXE Boot Menu
+
+[boot.local]
+; 
+; This entry simply exits iPXE, and should
+; continue bootng your device
+;
+exit
+
+[boot.smartos]
+;
+; This is an example entry on how to boot SmartOS
+; Note how it is possible to define custom keys that
+; can be interpolated across entries with %(key)s
+;
+name= SmartOS
+description= SmartOS build %(smartosBuild)s
+smartosBuild= 20200603T203505Z
+;
+; If you are new to ipxe, let me explain briefly
+; you need two things, mainly, to boot a machine:
+; a kernel with boot options
+kernel= /smartos/%(smartosBuild)s/platform/i86pc/kernel/amd64/unix -B smartos=true
+; and a root device, in this case an image that loads to RAM
+initrd= /smartos/%(smartosBuild)s/platform/i86pc/amd64/boot_archive
+
+[boot.alpine]
+;
+; Booting Linux distributions is quite similar 
+; to the previous example
+;
+name= Alpine
+description= Alpine Linux
+alpineRepo= http://dl-cdn.alpinelinux.org/alpine/v3.11/main
+kernel= /alpine/boot/vmlinuz-lts ip=dhcp alpine-repo=%(alpineRepo)s modules=loop,squashfs modloop=%(serverRoot)s/alpine/boot/modloop-lts nomodeset
+initrd= /alpine/boot/initramfs-lts
+
+[machines]
+;
+; UUID, or MAC address of machines paired with boot options
+; The first option is considered to be the default
+;
+00-00-00-00-00-00=boot.alpine,boot.smartos
+00-00-00-00-00-01=boot.alpine,boot.smartos,boot.local
