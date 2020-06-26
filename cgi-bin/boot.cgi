@@ -10,12 +10,15 @@ def main():
     form = cgi.FieldStorage()
     print("Content-Type: text/plain;charset=utf-8")
     print()
-    if 'mac' in form:
-        getIPXEMenu(form['mac'].value)
+    if 'id' in form:
+        getIPXEMenu(form['id'].value)
     else:
-        print("No hardware address provided")
+        print("boot.cgi")
+        print("/////////////////////")
+        print("Usage: boot.cgi?id=<hwAddress>")
+        print("       boot.cgi?id=<machineUUID>")
 
-def getIPXEMenu(hwAddress):
+def getIPXEMenu(machineId):
     config = ConfigParser(allow_no_value=True, default_section='common')
 
     config.read('bootconfig.ini')
@@ -25,7 +28,7 @@ def getIPXEMenu(hwAddress):
         bootEntryTemplate = bootTemplate.read()
 
     #get boot options for this machine
-    bootEntries = config.get('machines', hwAddress).split(',')
+    bootEntries = config.get('machines', machineId).split(',')
 
     targets = []
     for entry in bootEntries:

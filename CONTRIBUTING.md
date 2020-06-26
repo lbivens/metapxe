@@ -1,5 +1,4 @@
 # Contributing
-
 I hope trying out metapxe has been worth it!
 Could it be better? I am sure it could! Do you have ideas? My time is yours.
 

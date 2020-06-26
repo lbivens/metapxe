@@ -58,5 +58,6 @@ initrd= /alpine/boot/initramfs-lts
 ; UUID, or MAC address of machines paired with boot options
 ; The first option is considered to be the default
 ;
+default=boot.local
 00-00-00-00-00-00=boot.alpine,boot.smartos
 00-00-00-00-00-01=boot.alpine,boot.smartos,boot.local
