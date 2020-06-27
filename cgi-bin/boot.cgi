@@ -28,7 +28,8 @@ def getIPXEMenu(machineId):
         bootEntryTemplate = bootTemplate.read()
 
     #get boot options for this machine
-    bootEntries = config.get('machines', machineId).split(',')
+    bootEntries = (config.get('machines', machineId) if config.has_option('machines', machineId) 
+                   else config.get('machines', 'default')).split(',')
 
     targets = []
     for entry in bootEntries:
@@ -42,6 +43,7 @@ def getIPXEMenu(machineId):
 
     menuParameters = {
         "menuTitle": config.get('common', 'menuTitle'),
+        "menuAlert": "" if config.has_option('machines', machineId) else config.get('common', 'menuAlert'),
         "bootOptions": "\n".join(["item {}\t{}".format(x, config.get(x, 'description')) for x in bootEntries]),
         "defaultBootOption": bootEntries[0],
         "timeout": config.get('common', 'timeout'),

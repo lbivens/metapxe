@@ -1,4 +1,4 @@
 #!ipxe
 dhcp
 isset ${uuid} && set id ${uuid} || set id ${net0/mac:hexhyp}
-chain http://${nect-server}/cgi-bin/boot?id=${id}
+chain http://${next-server}/cgi-bin/boot?id=${id}

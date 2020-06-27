@@ -1,6 +1,6 @@
 #!ipxe
 :start
-menu $menuTitle
+menu $menuTitle $menuAlert
 item
 item --gap -- \\\\\ Operating systems 
 $bootOptions
